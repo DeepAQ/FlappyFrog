@@ -402,6 +402,20 @@ function setGameOver() {
   stopPipes();
   showGameOver();
   playHurtSound();
+  updateTelegram();
+}
+
+function updateTelegram() {
+  var getParam = function (name) {
+    var r = window.location.search.substr(1).match(new RegExp("(^|&)" + name + "=([^&]*)(&|#|$)"));
+    return (r != null) ? decodeURIComponent(r[2]) : null;
+  };
+  var hash = getParam('hash');
+  var iv = getParam('iv');
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '../update_score.php', true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.send('hash=' + encodeURIComponent(hash) + '&iv=' + iv + '&score=' + _score);
 }
 
 function showGameOver() {
